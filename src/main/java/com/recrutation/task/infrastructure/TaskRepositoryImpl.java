@@ -2,14 +2,13 @@ package com.recrutation.task.infrastructure;
 
 import com.recrutation.task.domain.Task;
 import com.recrutation.task.domain.TaskRepository;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -35,14 +34,15 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @Override
   public void addTask(Task task) {
-    var toSave = task.toBuilder().creationDate(LocalDateTime.now()).build();
-    mongoRepository.save(mapper.toEntity(toSave));
+    var toSave =
+        task.toBuilder()
+            .creationDate(LocalDateTime.now())
+            .build(); // todo resolve problem with update
   }
 
   @Override
   public void updateTask(String uniqueId, Task task) {
-    mongoRepository.deleteById(uniqueId);
-    addTask(task);
+    mongoRepository.save(mapper.toEntity(task));
   }
 
   @Override

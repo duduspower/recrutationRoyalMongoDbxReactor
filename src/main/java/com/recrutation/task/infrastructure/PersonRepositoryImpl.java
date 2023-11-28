@@ -37,8 +37,7 @@ class PersonRepositoryImpl implements PersonRepository {
 
   @Override
   public void updatePerson(String uniqueId, Person person) {
-    mongoRepository.deleteById(uniqueId);
-    addPerson(person);
+    mongoRepository.save(mapper.toEntity(person)); // todo resolve problem with update
   }
 
   @Override
